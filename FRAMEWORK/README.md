@@ -13,23 +13,10 @@ In the base AgentFlow framework, an agent receives untrusted input data in the s
 
 DeclaGuard defines how a conductor prevents the **consequences** of prompt injection in a no-code swarm. It blocks actions, messages, transition conditions, state writes and answers that the declared policy does not allow, and records every such attempt in a journal. The scenario author writes the policy as declarative fields of the swarm description, without code. An unchanged universal conductor enforces it deterministically, with no LLM-based detectors.
 
+
+## 2. Out of scope
+
 Out of scope: attacks that only distort the text of an answer (text-to-text), replacement of the swarm description itself, poisoning of tool descriptions, and transport or execution-environment attacks.
-
-## 2. Relationship to AgentFlow
-
-DeclaGuard keeps from AgentFlow [1; 3; 4]:
-- the logical primitives and the agent model a = ⟨R, S, L, C⟩ [3];
-- the conductor tuple D = ⟨P, S, E, M⟩ [1] and the JSON swarm description [1];
-- the requirement that a swarm written for AgentFlow runs without changes (Section 11, DG-REQ-12).
-
-DeclaGuard extends or departs from AgentFlow in the following explicit ways:
-1. It changes the **behaviour** of P (static check), S (transition conditions), E (tool calls, messages, answer) and M (state writes). In [4] the core P, S, M stays unchanged.
-2. Tool calls chosen by the model are our extension. In base AgentFlow the executor E only calls the LLM [1; 4], tool usage is associated with frameworks that require code [4], and in [4] code is chosen by the router R, not by the model. This is our reading of these works, not a quotation.
-3. In the Dual LLM pattern the actor receives references `$VAR` instead of the full prompt of upstream agents.
-4. Transition conditions are allowed only over typed fields of the schema.
-5. The link rule (GP-3) inspects the content of outputs. This departs from the principle that the conductor components "manipulate only the syntax and structure of prompts, not their semantic content" [1].
-6. State lives for one run only.
-7. The JSON swarm description gains the key `comm`. The field already exists in the agent tuple p = ⟨type, id, role, logic, state, comm⟩ [1] but not in the JSON example of [1].
 
 ## 3. Threat Model
 
